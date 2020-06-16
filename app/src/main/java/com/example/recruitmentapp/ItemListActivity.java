@@ -141,4 +141,9 @@ public class ItemListActivity extends AppCompatActivity {
             }
         }
     }
+    public void addJob(View view) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context,AddJobActivity.class);
+        context.startActivity(intent);
+    }
 }

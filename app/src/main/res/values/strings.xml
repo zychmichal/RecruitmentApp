@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">RecruitmentApp</string>
     <string name="title_item_detail">Item Detail</string>
+    <string name="JobTitle">Job</string>
+    <string name="CompanyName">CompanyName</string>
+    <string name="LocationName">LocationName</string>
+    <string name="SalaryFrom">SalaryFrom</string>
+    <string name="SalaryTo">SalaryTo</string>
+    <string name="DescriptionText">DescriptionText</string>
+    <string name="CreateText">CreateText</string>
+    <string name="Description">Description</string>
+    <string name="Create">Create</string>
 </resources>
