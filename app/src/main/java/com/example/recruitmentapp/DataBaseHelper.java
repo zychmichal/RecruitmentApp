@@ -2,10 +2,14 @@ package com.example.recruitmentapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String JOB_OFFER_TABLE = "JOB_OFFER_TABLE";
@@ -52,4 +56,44 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return true;
         }
     }
+
+    public List<JobOfferModel> getAllJobOffers() {
+
+        List<JobOfferModel> returnList = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + JOB_OFFER_TABLE;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if(cursor.moveToFirst()) {
+            do {
+                int customerID = cursor.getInt(0);
+                String jobOffer = cursor.getString(1);
+                String companyName = cursor.getString(2);
+                String location = cursor.getString(3);
+                int salaryFrom = cursor.getInt(4);
+                int salaryTo = cursor.getInt(5);
+                String description = cursor.getString(6);
+
+                JobOfferModel newJobOffer = new JobOfferModel(customerID, jobOffer, companyName, location, salaryFrom, salaryTo, description);
+                returnList.add(newJobOffer);
+
+            } while(cursor.moveToNext());
+        }
+        else {
+
+        }
+
+        cursor.close();
+        db.close();
+        return returnList;
+
+
+
+
+    }
+
+
 }
