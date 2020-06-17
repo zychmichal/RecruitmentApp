@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.recruitmentapp.jobOffer.DummyContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,11 +38,16 @@ public class ItemListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private List<JobOfferModel> data = new ArrayList<JobOfferModel>();
+    DataBaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
+
+        db = new DataBaseHelper(this);
+        data = db.getAllJobOffers();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,6 +61,21 @@ public class ItemListActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null){
+            int id = extras.getInt("id");
+            String jobTitle = extras.getString("jobtitle");
+            String companyName = extras.getString("companyname");
+            String location = extras.getString("location");
+            int salaryFrom = extras.getInt("salafyfrom");
+            int salaryTo = extras.getInt("salaryto");
+            String description = extras.getString("description");
+
+            JobOfferModel newJobOffer = new JobOfferModel(id, jobTitle, companyName, location, salaryFrom, salaryTo, description);
+            data.add(newJobOffer);
+        }
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -70,7 +91,7 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, new DataBaseHelper(ItemListActivity.this).getAllJobOffers(), mTwoPane));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, data, mTwoPane));
     }
 
     public static class SimpleItemRecyclerViewAdapter

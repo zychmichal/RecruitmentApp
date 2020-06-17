@@ -66,6 +66,17 @@ public class AddJobActivity extends AppCompatActivity {
 
                 asy.execute(jobOfferModel);
 
+                Intent i = new Intent(AddJobActivity.this, ItemListActivity.class);
+                i.putExtra("id", jobOfferModel.getId());
+                i.putExtra("jobtitle", jobOfferModel.getJobTitle());
+                i.putExtra("companyname", jobOfferModel.getCompanyName());
+                i.putExtra("location", jobOfferModel.getLocation());
+                i.putExtra("salafyfrom", jobOfferModel.getSalaryFrom());
+                i.putExtra("salaryto", jobOfferModel.getSalaryTo());
+                i.putExtra("description", jobOfferModel.getDescription());
+                startActivity(i);
+
+
                 //Toast.makeText(AddJobActivity.this, "Success= " + success, Toast.LENGTH_SHORT).show();
 
 
