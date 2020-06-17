@@ -20,6 +20,8 @@ public class AddJobActivity extends AppCompatActivity {
     Button btn_create;
     EditText et_jobTitle, et_companyName, et_location,
             et_description, et_salaryFrom, et_salaryTo;
+    async asy;
+    DataBaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,8 @@ public class AddJobActivity extends AppCompatActivity {
         et_location = findViewById(R.id.et_location);
         et_salaryFrom = findViewById(R.id.et_salaryFrom);
         et_salaryTo = findViewById(R.id.et_salaryTo);
+        asy = new async(this);
+        db = new DataBaseHelper(this);
 
         btn_create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,11 +60,13 @@ public class AddJobActivity extends AppCompatActivity {
                     jobOfferModel = new JobOfferModel(-1, "error", "error", "error", 0, 0, "error");
                 }
 
-                DataBaseHelper dataBaseHelper = new DataBaseHelper(AddJobActivity.this);
+                //DataBaseHelper dataBaseHelper = new DataBaseHelper(AddJobActivity.this);
 
-                boolean success = dataBaseHelper.addOne(jobOfferModel);
+                //boolean success = dataBaseHelper.addOne(jobOfferModel);
 
-                Toast.makeText(AddJobActivity.this, "Success= " + success, Toast.LENGTH_SHORT).show();
+                asy.execute(jobOfferModel);
+
+                //Toast.makeText(AddJobActivity.this, "Success= " + success, Toast.LENGTH_SHORT).show();
 
 
             }
