@@ -22,6 +22,7 @@ public class AddJobActivity extends AppCompatActivity {
             et_description, et_salaryFrom, et_salaryTo;
     async asy;
     DataBaseHelper db;
+    private StorageWrapper wrapper = StorageWrapper.storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,25 +61,11 @@ public class AddJobActivity extends AppCompatActivity {
                     jobOfferModel = new JobOfferModel(-1, "error", "error", "error", 0, 0, "error");
                 }
 
-                //DataBaseHelper dataBaseHelper = new DataBaseHelper(AddJobActivity.this);
-
-                //boolean success = dataBaseHelper.addOne(jobOfferModel);
-
                 asy.execute(jobOfferModel);
-
-                Intent i = new Intent(AddJobActivity.this, ItemListActivity.class);
-                i.putExtra("id", jobOfferModel.getId());
-                i.putExtra("jobtitle", jobOfferModel.getJobTitle());
-                i.putExtra("companyname", jobOfferModel.getCompanyName());
-                i.putExtra("location", jobOfferModel.getLocation());
-                i.putExtra("salafyfrom", jobOfferModel.getSalaryFrom());
-                i.putExtra("salaryto", jobOfferModel.getSalaryTo());
-                i.putExtra("description", jobOfferModel.getDescription());
-                startActivity(i);
-
-
-                //Toast.makeText(AddJobActivity.this, "Success= " + success, Toast.LENGTH_SHORT).show();
-
+                int newId = wrapper.getLastJobOffer().getId() + 1;
+                jobOfferModel.setId(newId);
+                wrapper.addJobOffer(jobOfferModel);
+                finish();
 
             }
         });

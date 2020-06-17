@@ -2,7 +2,6 @@ package com.example.recruitmentapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,15 +12,11 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.example.recruitmentapp.jobOffer.DummyContent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An activity representing a list of Items. This activity
@@ -38,16 +33,19 @@ public class ItemListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
-    private List<JobOfferModel> data = new ArrayList<JobOfferModel>();
+    private StorageWrapper storageWrapper = StorageWrapper.storage;
     DataBaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
-
+        Log.d("X","Tworzymy sie");
         db = new DataBaseHelper(this);
-        data = db.getAllJobOffers();
+        if(storageWrapper.getFirstTime()){
+            storageWrapper.readListFromDatabase(db.getAllJobOffers());
+            storageWrapper.changeFirstTime();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,20 +60,6 @@ public class ItemListActivity extends AppCompatActivity {
             }
         });
 
-        Bundle extras = getIntent().getExtras();
-
-        if (extras != null){
-            int id = extras.getInt("id");
-            String jobTitle = extras.getString("jobtitle");
-            String companyName = extras.getString("companyname");
-            String location = extras.getString("location");
-            int salaryFrom = extras.getInt("salafyfrom");
-            int salaryTo = extras.getInt("salaryto");
-            String description = extras.getString("description");
-
-            JobOfferModel newJobOffer = new JobOfferModel(id, jobTitle, companyName, location, salaryFrom, salaryTo, description);
-            data.add(newJobOffer);
-        }
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -91,14 +75,14 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, data, mTwoPane));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, storageWrapper, mTwoPane));
     }
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final ItemListActivity mParentActivity;
-        private final List<JobOfferModel> mValues;
+        private final StorageWrapper wrapper;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
@@ -123,9 +107,9 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      List<JobOfferModel> items,
+                                      StorageWrapper wrapper,
                                       boolean twoPane) {
-            mValues = items;
+            this.wrapper = wrapper;
             mParentActivity = parent;
             mTwoPane = twoPane;
         }
@@ -139,16 +123,16 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(Integer.toString(mValues.get(position).getId()));
-            holder.mContentView.setText(mValues.get(position).getJobTitle());
+            holder.mIdView.setText(Integer.toString(wrapper.getJobOffer(position).getId()));
+            holder.mContentView.setText(wrapper.getJobOffer(position).getJobTitle());
 
-            holder.itemView.setTag(mValues.get(position));
+            holder.itemView.setTag(wrapper.getJobOffer(position));
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
         @Override
         public int getItemCount() {
-            return mValues.size();
+            return wrapper.getSize();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
