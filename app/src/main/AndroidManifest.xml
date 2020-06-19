@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.recruitmentapp">
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -29,6 +31,11 @@
                 android:value="com.example.recruitmentapp.ItemListActivity" />
         </activity>
         <activity android:name=".AddJobActivity" />
+        <receiver android:name=".IncomingCall">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

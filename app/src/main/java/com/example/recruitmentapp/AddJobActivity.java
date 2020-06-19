@@ -2,10 +2,15 @@ package com.example.recruitmentapp;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.media.session.PlaybackState;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,8 +19,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressLint("Registered")
 public class AddJobActivity extends AppCompatActivity {
+
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
     Button btn_create;
     EditText et_jobTitle, et_companyName, et_location,
@@ -28,6 +38,7 @@ public class AddJobActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkAndRequestPermissions();
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -87,5 +98,27 @@ public class AddJobActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private  boolean checkAndRequestPermissions() {
+        int readPhoneState = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+        int read_call_log = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG);
+        List listPermissionsNeeded = new ArrayList<>();
+        if (readPhoneState != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
+        }
+
+        if (read_call_log != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CALL_LOG);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    (String[]) listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
+                    REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
     }
 }
