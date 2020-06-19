@@ -41,7 +41,6 @@ public class ItemListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
-        Log.d("X","Tworzymy sie");
         db = new DataBaseHelper(this);
         if(storageWrapper.getFirstTime()){
             storageWrapper.readListFromDatabase(db.getAllJobOffers());
@@ -52,19 +51,10 @@ public class ItemListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
+            // large-screen layouts (res/values-w900dp) and landscape orientation.
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
