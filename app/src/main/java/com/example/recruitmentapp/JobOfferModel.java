@@ -80,14 +80,12 @@ public class JobOfferModel {
 
     @Override
     public String toString() {
-        return "JobOfferModel{" +
-                "id=" + id +
-                ", jobTitle='" + jobTitle + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", location='" + location + '\'' +
-                ", salaryFrom=" + salaryFrom +
-                ", salaryTo=" + salaryTo +
-                ", description='" + description + '\'' +
-                '}';
+        return "JobTitle = " + jobTitle  +
+                ",\n companyName = " + companyName +
+                ",\n location = " + location  +
+                ",\n salaryFrom = " + salaryFrom +
+                ",\n salaryTo = " + salaryTo +
+                ",\n description = " + description;
     }
+
 }
