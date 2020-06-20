@@ -39,4 +39,8 @@ public class StorageWrapper {
         return jobOfferModelList.size();
     }
 
+    public boolean isEmpty(){
+        return jobOfferModelList.isEmpty();
+    }
+
 }

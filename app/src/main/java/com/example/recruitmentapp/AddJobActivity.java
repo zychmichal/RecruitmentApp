@@ -73,7 +73,12 @@ public class AddJobActivity extends AppCompatActivity {
                 }
 
                 asy.execute(jobOfferModel);
-                int newId = wrapper.getLastJobOffer().getId() + 1;
+                int newId;
+                if(wrapper.isEmpty()){
+                    newId = 1;
+                }else{
+                    newId = wrapper.getLastJobOffer().getId() + 1;
+                }
                 jobOfferModel.setId(newId);
                 wrapper.addJobOffer(jobOfferModel);
                 finish();
